@@ -5,6 +5,7 @@ defmodule Nobank.Users.User do
   alias Ecto.Changeset
 
   @required_params [:name, :password, :email, :postal_code]
+  @w3c_email_regex ~r/^[[:alnum:].!#$%&'*+\/=?^_`{|}~-]+@[[:alnum:]-]+(?:\.[[:alnum:]-]+)*$/
 
   schema "users" do
     field :name, :string
@@ -21,6 +22,8 @@ defmodule Nobank.Users.User do
     |> cast(params, @required_params)
     |> validate_required(@required_params)
     |> validate_length(:name, min: 3)
+    |> validate_format(:email, @w3c_email_regex)
+    |> validate_format(:postal_code, ~r/^[[:digit:]]+$/)
     |> put_password_hash()
   end
 
