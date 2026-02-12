@@ -24,6 +24,7 @@ defmodule Nobank.Users.User do
     |> validate_length(:name, min: 3)
     |> validate_format(:email, @w3c_email_regex)
     |> validate_format(:postal_code, ~r/^[[:digit:]]+$/)
+    |> unique_constraint(:email)
     |> put_password_hash()
   end
 
