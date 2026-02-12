@@ -20,4 +20,12 @@ defmodule NobankWeb.UsersController do
       |> render(:show, user: user)
     end
   end
+
+  def update(conn, %{"id" => id} = params) do
+    with {:ok, %User{} = user} <- Users.update(id, params) do
+      conn
+      |> put_status(:ok)
+      |> render(:update, user: user)
+    end
+  end
 end

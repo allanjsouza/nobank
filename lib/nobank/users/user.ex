@@ -4,8 +4,9 @@ defmodule Nobank.Users.User do
 
   alias Ecto.Changeset
 
-  @required_params [:name, :password, :email, :postal_code]
+  @all_params [:name, :password, :email, :postal_code]
   @w3c_email_regex ~r/^[[:alnum:].!#$%&'*+\/=?^_`{|}~-]+@[[:alnum:]-]+(?:\.[[:alnum:]-]+)*$/
+  @only_digit_regex ~r/^[[:digit:]]+$/
 
   # Another way to show a user (instead of `data` function on `NobankWeb.UsersJSON` module)
   # @derive {Jason.Encoder, only: [:name, :email, :postal_code]}
@@ -19,15 +20,27 @@ defmodule Nobank.Users.User do
     timestamps()
   end
 
-  def changeset(user \\ %__MODULE__{}, params) do
+  def changeset(params) do
+    %__MODULE__{}
+    |> cast(params, @all_params)
+    |> do_validate(@all_params)
+    |> put_password_hash()
+  end
+
+  def changeset(%__MODULE__{} = user, params) do
     user
-    |> cast(params, @required_params)
-    |> validate_required(@required_params)
+    |> cast(params, @all_params)
+    |> do_validate([:name, :email, :postal_code])
+    |> put_password_hash()
+  end
+
+  defp do_validate(changeset, required_params) do
+    changeset
+    |> validate_required(required_params)
     |> validate_length(:name, min: 3)
     |> validate_format(:email, @w3c_email_regex)
-    |> validate_format(:postal_code, ~r/^[[:digit:]]+$/)
+    |> validate_format(:postal_code, @only_digit_regex)
     |> unique_constraint(:email)
-    |> put_password_hash()
   end
 
   defp put_password_hash(%Changeset{valid?: true, changes: %{password: pwd}} = changeset) do
