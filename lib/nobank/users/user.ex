@@ -7,6 +7,8 @@ defmodule Nobank.Users.User do
   @required_params [:name, :password, :email, :postal_code]
   @w3c_email_regex ~r/^[[:alnum:].!#$%&'*+\/=?^_`{|}~-]+@[[:alnum:]-]+(?:\.[[:alnum:]-]+)*$/
 
+  # Another way to show a user (instead of `data` function on `NobankWeb.UsersJSON` module)
+  # @derive {Jason.Encoder, only: [:name, :email, :postal_code]}
   schema "users" do
     field :name, :string
     field :password, :string, virtual: true

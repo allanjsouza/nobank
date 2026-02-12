@@ -25,6 +25,8 @@ defmodule NobankWeb.ErrorJSON do
     %{errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)}
   end
 
+  def error(%{status: :not_found, path: path}), do: %{status: 404, error: "Not found", path: path}
+
   defp translate_error({msg, opts}) do
     Regex.replace(~r"%{(\w+)}", msg, fn _, key ->
       opts |> Keyword.get(String.to_existing_atom(key), key) |> to_string()

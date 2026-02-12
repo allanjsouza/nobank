@@ -10,7 +10,7 @@ defmodule NobankWeb.Router do
 
     get "/", HomeController, :index
 
-    resources "/users", UsersController, only: [:create]
+    resources "/users", UsersController, only: [:create, :show]
   end
 
   # Enable LiveDashboard in development
