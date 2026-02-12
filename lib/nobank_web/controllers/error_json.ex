@@ -26,6 +26,7 @@ defmodule NobankWeb.ErrorJSON do
   end
 
   def error(%{status: :not_found, path: path}), do: %{status: 404, error: "Not found", path: path}
+  def error(%{status: :not_found}), do: %{status: 404, error: "Not found"}
 
   defp translate_error({msg, opts}) do
     Regex.replace(~r"%{(\w+)}", msg, fn _, key ->
