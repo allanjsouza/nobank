@@ -9,6 +9,8 @@ defmodule NobankWeb.Router do
     pipe_through :api
 
     get "/", HomeController, :index
+
+    resources "/users", UsersController, only: [:create]
   end
 
   # Enable LiveDashboard in development
