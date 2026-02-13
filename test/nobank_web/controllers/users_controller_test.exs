@@ -2,14 +2,26 @@ defmodule NobankWeb.UsersControllerTest do
   @moduledoc false
   use NobankWeb.ConnCase, async: true
 
+  import Mox
   import Nobank.Users.UserFactory
 
   alias Nobank.Repo
   alias Nobank.Users.User
+  alias Nobank.ViaCep.ApiMock, as: ViaCepApi
+  alias Nobank.ViaCep.ApiFactory, as: ViaCepApiFactory
+
+  setup :verify_on_exit!
 
   describe "create/2" do
     test "successfully creates an user and responds with data", %{conn: conn} do
       params = params_for(:user)
+      %{postal_code: postal_code} = params
+
+      expect(ViaCepApi, :get, fn param ->
+        assert postal_code == param
+
+        {:ok, ViaCepApiFactory.build(:get_response, %{"cep" => postal_code})}
+      end)
 
       response = post(conn, ~p"/api/users", params) |> json_response(:created)
 
@@ -19,7 +31,7 @@ defmodule NobankWeb.UsersControllerTest do
                  "id" => user_id,
                  "name" => "John Doe",
                  "password" => "REDACTED",
-                 "postal_code" => "11000000"
+                 "postal_code" => ^postal_code
                },
                "message" => "User created successfully"
              } = response
@@ -28,11 +40,19 @@ defmodule NobankWeb.UsersControllerTest do
     end
 
     test "when params are invalid it responds with errors", %{conn: conn} do
+      postal_code = "11000-000"
+
       invalid_params = %{
         name: "Jo",
         email: "jo.example.com",
-        postal_code: "11000-000"
+        postal_code: postal_code
       }
+
+      expect(ViaCepApi, :get, fn param ->
+        assert postal_code == param
+
+        {:ok, ViaCepApiFactory.build(:get_response, %{"cep" => postal_code})}
+      end)
 
       response = post(conn, ~p"/api/users", invalid_params) |> json_response(:bad_request)
 
