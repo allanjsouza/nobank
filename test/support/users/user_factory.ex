@@ -1,4 +1,4 @@
-defmodule Nobank.UserFactory do
+defmodule Nobank.Users.UserFactory do
   @moduledoc false
   use ExMachina.Ecto, repo: Nobank.Repo
 

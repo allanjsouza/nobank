@@ -14,4 +14,11 @@ defmodule NobankWeb.FallbackController do
     |> put_view(json: NobankWeb.ErrorJSON)
     |> render(:error, status: :not_found, path: conn.request_path)
   end
+
+  def call(conn, {:error, :unprocessable_entity}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(json: NobankWeb.ErrorJSON)
+    |> render(:error, status: :unprocessable_entity)
+  end
 end

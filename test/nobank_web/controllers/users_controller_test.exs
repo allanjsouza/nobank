@@ -2,7 +2,7 @@ defmodule NobankWeb.UsersControllerTest do
   @moduledoc false
   use NobankWeb.ConnCase, async: true
 
-  import Nobank.UserFactory
+  import Nobank.Users.UserFactory
 
   alias Nobank.Repo
   alias Nobank.Users.User
