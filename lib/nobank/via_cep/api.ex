@@ -1,6 +1,11 @@
 defmodule Nobank.ViaCep.Api do
+  alias Nobank.ViaCep.ApiBehaviour
+
   @base_url "https://viacep.com.br/ws"
 
+  @behaviour ApiBehaviour
+
+  @impl ApiBehaviour
   def get(base_url \\ @base_url, postal_code) do
     base_url
     |> client()
