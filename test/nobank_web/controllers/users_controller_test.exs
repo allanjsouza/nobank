@@ -2,18 +2,14 @@ defmodule NobankWeb.UsersControllerTest do
   @moduledoc false
   use NobankWeb.ConnCase, async: true
 
+  import Nobank.UserFactory
+
   alias Nobank.Repo
-  alias Nobank.Users
   alias Nobank.Users.User
 
   describe "create/2" do
     test "successfully creates an user and responds with data", %{conn: conn} do
-      params = %{
-        name: "John Doe",
-        email: "john.doe@example.com",
-        password: "qwerty#123",
-        postal_code: "11000000"
-      }
+      params = params_for(:user)
 
       response = post(conn, ~p"/api/users", params) |> json_response(:created)
 
@@ -32,13 +28,13 @@ defmodule NobankWeb.UsersControllerTest do
     end
 
     test "when params are invalid it responds with errors", %{conn: conn} do
-      params = %{
+      invalid_params = %{
         name: "Jo",
         email: "jo.example.com",
         postal_code: "11000-000"
       }
 
-      response = post(conn, ~p"/api/users", params) |> json_response(:bad_request)
+      response = post(conn, ~p"/api/users", invalid_params) |> json_response(:bad_request)
 
       expected_response = %{
         "errors" => %{
@@ -55,14 +51,7 @@ defmodule NobankWeb.UsersControllerTest do
 
   describe "show/2" do
     test "successfully responds with user data", %{conn: conn} do
-      params = %{
-        name: "John Doe",
-        email: "john.doe@example.com",
-        password: "qwerty#123",
-        postal_code: "11000000"
-      }
-
-      {:ok, %User{id: user_id}} = Users.create(params)
+      %User{id: user_id} = insert(:user)
 
       response = get(conn, ~p"/api/users/#{user_id}") |> json_response(:ok)
 
@@ -94,23 +83,17 @@ defmodule NobankWeb.UsersControllerTest do
 
   describe "update/2" do
     test "successfully updates an user and responds with updated data", %{conn: conn} do
-      params = %{
-        name: "John Doe",
-        email: "john.doe@example.com",
-        password: "qwerty#123",
-        postal_code: "11000000"
-      }
+      %User{id: user_id} = insert(:user)
 
-      {:ok, %User{id: user_id}} = Users.create(params)
+      update_params =
+        params_for(:user,
+          name: "John",
+          email: "john_doe@example.com",
+          password: "qwerty123",
+          postal_code: "22000000"
+        )
 
-      updated_params = %{
-        name: "John",
-        email: "john_doe@example.com",
-        password: "qwerty123",
-        postal_code: "22000000"
-      }
-
-      response = put(conn, ~p"/api/users/#{user_id}", updated_params) |> json_response(:ok)
+      response = put(conn, ~p"/api/users/#{user_id}", update_params) |> json_response(:ok)
 
       expected_response = %{
         "data" => %{
@@ -127,12 +110,13 @@ defmodule NobankWeb.UsersControllerTest do
     end
 
     test "when user does not exists it responds with not_found error", %{conn: conn} do
-      update_params = %{
-        name: "John",
-        email: "john_doe@example.com",
-        password: "qwerty123",
-        postal_code: "22000000"
-      }
+      update_params =
+        params_for(:user,
+          name: "John",
+          email: "john_doe@example.com",
+          password: "qwerty123",
+          postal_code: "22000000"
+        )
 
       response = put(conn, ~p"/api/users/999999", update_params) |> json_response(:not_found)
 
@@ -148,14 +132,7 @@ defmodule NobankWeb.UsersControllerTest do
 
   describe "delete/2" do
     test "successfully deletes the user with given id and responds with no_content", %{conn: conn} do
-      params = %{
-        name: "John Doe",
-        email: "john.doe@example.com",
-        password: "qwerty#123",
-        postal_code: "11000000"
-      }
-
-      {:ok, %User{id: user_id}} = Users.create(params)
+      %User{id: user_id} = insert(:user)
 
       response = delete(conn, ~p"/api/users/#{user_id}") |> json_response(:no_content)
 
