@@ -49,8 +49,9 @@ defmodule Nobank.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
+      {:argon2_elixir, "~> 4.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:argon2_elixir, "~> 4.0"}
+      {:ex_machina, "~> 2.8.0", only: :test}
     ]
   end
 
