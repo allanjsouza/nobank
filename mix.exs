@@ -52,7 +52,8 @@ defmodule Nobank.MixProject do
       {:argon2_elixir, "~> 4.0"},
       {:tesla, "~> 1.16"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:ex_machina, "~> 2.8.0", only: :test}
+      {:ex_machina, "~> 2.8.0", only: :test},
+      {:bypass, "~> 2.1", only: :test}
     ]
   end
 
