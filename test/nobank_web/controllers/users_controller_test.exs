@@ -91,12 +91,7 @@ defmodule NobankWeb.UsersControllerTest do
     test "when user does not exists it responds with not_found error", %{conn: conn} do
       response = get(conn, ~p"/api/users/999999") |> json_response(:not_found)
 
-      expected_response = %{
-        "error" => "Not found",
-        "path" => "/api/users/999999",
-        "status" => 404
-      }
-
+      expected_response = %{"error" => "Not Found", "status" => 404}
       assert expected_response == response
     end
   end
@@ -140,12 +135,7 @@ defmodule NobankWeb.UsersControllerTest do
 
       response = put(conn, ~p"/api/users/999999", update_params) |> json_response(:not_found)
 
-      expected_response = %{
-        "error" => "Not found",
-        "path" => "/api/users/999999",
-        "status" => 404
-      }
-
+      expected_response = %{"error" => "Not Found", "status" => 404}
       assert expected_response == response
     end
   end
@@ -163,12 +153,7 @@ defmodule NobankWeb.UsersControllerTest do
     test "when user does not exists, returns a not_found error", %{conn: conn} do
       response = delete(conn, ~p"/api/users/999999") |> json_response(:not_found)
 
-      expected_response = %{
-        "error" => "Not found",
-        "path" => "/api/users/999999",
-        "status" => 404
-      }
-
+      expected_response = %{"error" => "Not Found", "status" => 404}
       assert expected_response == response
     end
   end

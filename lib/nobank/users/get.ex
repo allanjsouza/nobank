@@ -1,4 +1,4 @@
-defmodule Nobank.Users.Show do
+defmodule Nobank.Users.Get do
   alias Nobank.Repo
   alias Nobank.Users.User
 

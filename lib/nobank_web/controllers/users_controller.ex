@@ -14,7 +14,7 @@ defmodule NobankWeb.UsersController do
   end
 
   def show(conn, %{"id" => id}) do
-    with {:ok, %User{} = user} <- Users.show(id) do
+    with {:ok, %User{} = user} <- Users.get(id) do
       conn
       |> put_status(:ok)
       |> render(:show, user: user)
