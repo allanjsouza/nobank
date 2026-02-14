@@ -3,6 +3,7 @@ defmodule Nobank.Users.User do
   import Ecto.Changeset
 
   alias Ecto.Changeset
+  alias Nobank.Accounts.Account
 
   @all_params [:name, :password, :email, :postal_code]
   @w3c_email_regex ~r/^[[:alnum:].!#$%&'*+\/=?^_`{|}~-]+@[[:alnum:]-]+(?:\.[[:alnum:]-]+)*$/
@@ -16,6 +17,7 @@ defmodule Nobank.Users.User do
     field :password_hash, :string
     field :email, :string
     field :postal_code, :string
+    has_one :account, Account
 
     timestamps()
   end
