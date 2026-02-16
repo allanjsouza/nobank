@@ -12,6 +12,7 @@ defmodule NobankWeb.Router do
 
     resources "/users", UsersController, only: [:create, :show, :update, :delete]
     resources "/accounts", AccountsController, only: [:create]
+    post "/accounts/transaction", AccountsController, :transaction
   end
 
   # Enable LiveDashboard in development
