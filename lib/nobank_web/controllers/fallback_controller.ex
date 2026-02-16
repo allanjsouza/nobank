@@ -8,8 +8,9 @@ defmodule NobankWeb.FallbackController do
     |> render(:error, changeset: changeset)
   end
 
-  def call(conn, {:error, :not_found = status}), do: handle_error(conn, status)
   def call(conn, {:error, :bad_request = status}), do: handle_error(conn, status)
+  def call(conn, {:error, :unauthorized = status}), do: handle_error(conn, status)
+  def call(conn, {:error, :not_found = status}), do: handle_error(conn, status)
   def call(conn, {:error, :unprocessable_entity = status}), do: handle_error(conn, status)
   def call(conn, {:error, :internal_server_error = status}), do: handle_error(conn, status)
 

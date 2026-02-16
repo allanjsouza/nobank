@@ -11,6 +11,8 @@ defmodule NobankWeb.Router do
     get "/", HomeController, :index
 
     resources "/users", UsersController, only: [:create, :show, :update, :delete]
+    post "/users/login", UsersController, :login
+
     resources "/accounts", AccountsController, only: [:create]
     post "/accounts/transaction", AccountsController, :transaction
   end

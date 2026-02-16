@@ -25,9 +25,10 @@ defmodule NobankWeb.ErrorJSON do
     %{errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)}
   end
 
+  def error(%{status: :bad_request}), do: %{status: 400, error: "Bad Request"}
+  def error(%{status: :unauthorized}), do: %{status: 401, error: "Unauthorized"}
   def error(%{status: :not_found, path: path}), do: %{status: 404, error: "Not Found", path: path}
   def error(%{status: :not_found}), do: %{status: 404, error: "Not Found"}
-  def error(%{status: :bad_request}), do: %{status: 400, error: "Bad Request"}
   def error(%{status: :unprocessable_entity}), do: %{status: 422, error: "Unprocessable Entity"}
   def error(%{status: :internal_server_error}), do: %{status: 500, error: "Internal Server Error"}
 

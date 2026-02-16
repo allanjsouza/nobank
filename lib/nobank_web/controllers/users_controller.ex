@@ -2,6 +2,7 @@ defmodule NobankWeb.UsersController do
   use NobankWeb, :controller
   alias Nobank.Users
   alias Nobank.Users.User
+  alias NobankWeb.Token
 
   action_fallback NobankWeb.FallbackController
 
@@ -34,6 +35,14 @@ defmodule NobankWeb.UsersController do
       conn
       |> put_status(:no_content)
       |> json(nil)
+    end
+  end
+
+  def login(conn, params) do
+    with {:ok, %User{} = user} <- Users.login(params) do
+      conn
+      |> put_status(:ok)
+      |> render(:login, token: Token.sign(user))
     end
   end
 end

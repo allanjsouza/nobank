@@ -17,6 +17,13 @@ defmodule NobankWeb.UsersJSON do
     }
   end
 
+  def login(%{token: token}) do
+    %{
+      message: "User authenticated successfully",
+      token: token
+    }
+  end
+
   defp data(%User{} = user) do
     %{
       id: user.id,
