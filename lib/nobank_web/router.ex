@@ -5,13 +5,23 @@ defmodule NobankWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug NobankWeb.Plugs.Auth
+  end
+
   scope "/api", NobankWeb do
     pipe_through :api
 
     get "/", HomeController, :index
 
-    resources "/users", UsersController, only: [:create, :show, :update, :delete]
+    resources "/users", UsersController, only: [:create]
     post "/users/login", UsersController, :login
+  end
+
+  scope "/api", NobankWeb do
+    pipe_through [:api, :auth]
+
+    resources "/users", UsersController, only: [:show, :update, :delete]
 
     resources "/accounts", AccountsController, only: [:create]
     post "/accounts/transaction", AccountsController, :transaction
